@@ -1,18 +1,7 @@
 import requests
 import os
-import argparse
 from dotenv import load_dotenv
 from urllib.parse import urlparse
-
-
-def create_parser():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('url', nargs='?', help='Введите url')
-    args = parser.parse_args()
-    if args.url:
-        return args.url
-    else:
-        return input("Введите URL: ")
 
 
 def shorten_link(token, url):
@@ -49,11 +38,8 @@ def count_clicks(token, url):
 
 def main():
     load_dotenv()
-    token = os.getenv("token")
-    if not token:
-        print("VK Token is not set. Please check your .env file.")
-        return
-    url = create_parser()
+    token = os.environ["VK_TOKEN"]
+    url = input('Введите URL: ')
     try:
         if is_shorten_link(url):
             print("Кол-во кликов:", count_clicks(token, url))
@@ -64,7 +50,7 @@ def main():
     except KeyError as e:
         print("Ошибка ключа:", e)
     except IndexError as e:
-        print("Ошибка индекса:", e)
+        print(f"Ошибка индекса: {e} \nВозможно ссылка не была использована или отсутствуют данные по кликам")
 
 
 if __name__ == "__main__":
