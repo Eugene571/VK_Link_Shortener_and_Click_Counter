@@ -1,5 +1,6 @@
 import requests
 import os
+import argparse
 from dotenv import load_dotenv
 from urllib.parse import urlparse
 
@@ -39,7 +40,13 @@ def count_clicks(token, url):
 def main():
     load_dotenv()
     token = os.environ["VK_TOKEN"]
-    url = input('Введите URL: ')
+    parser = argparse.ArgumentParser(description='Сокращение ссылок и просмотр статистики кликов по коротким ссылкам.')
+    parser.add_argument('url', type=str, nargs='?', help='URL для сокращения или проверки статистики')
+    args = parser.parse_args()
+    url = args.url
+    if url is None:
+        url = input('Введите URL: ')
+
     try:
         if is_shorten_link(url):
             print("Кол-во кликов:", count_clicks(token, url))
